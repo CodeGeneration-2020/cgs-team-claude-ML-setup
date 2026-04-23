@@ -12,7 +12,7 @@ Does not cover general Claude Code limitations or ML platform concerns.
 Claude reads the saved `.ipynb` file on disk. If you execute a cell in Jupyter but do not save, Claude will not see the result. There is no way to query the live kernel state.
 
 **Execution re-runs the full notebook.**
-Running via `nbconvert --execute` starts from cell 0. There is no single-cell execution path through Claude Code. This is slow for notebooks with expensive steps.
+Running via `nbconvert --execute` starts from cell 0. There is no single-cell execution path through Claude Code. This is slow for notebooks with expensive steps. `nbconvert` must also be installed separately (`pip install nbconvert`) — it is not available in all environments by default.
 
 **Interpretation cells are written from code, not from actual output.**
 When outputs are not saved in the notebook, Claude writes interpretation based on what the code should produce. Observations and values will be directional. Notebooks with non-obvious or data-dependent outputs require a run-first approach before annotating.
@@ -73,8 +73,6 @@ Claude correctly identified a no-op `VENDOR_MAP` entry and a `credit_debit_indic
 
 These are planned test cases from `docs/notebook-testing-findings.md` that have not been run yet:
 
-- **Execute and fix** — run via `nbconvert --execute`, have Claude read the traceback and fix the failing cell
-- **Code cell editing** — modify a function or fix a bug in a code cell; verify adjacent cells are unaffected
 - **Add a section as a unit** — insert a markdown header and a new code cell together in a single step
 - **Large notebook reliability** — verify read accuracy and edit reliability at 50–100 cells
 - **Saved plot outputs** — check whether Claude can read and interpret saved image outputs from a prior run

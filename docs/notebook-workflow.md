@@ -155,3 +155,26 @@ it uses, what the output is, and whether any steps look incomplete.
 - `prompts/notebook/` — reusable prompt templates for common tasks (EDA, feature engineering, model evaluation)
 - `checklists/ml-review.md` — a pre-commit checklist for notebook quality (outputs cleared, sections named, no dead cells)
 - `docs/limitations.md` — a living document tracking Claude Code notebook gaps as they are discovered or resolved
+
+---
+
+## 7. Auto-fix-minimal repair mode
+
+A validated repair mode for a single failing code cell. Use this when a notebook has one known failing cell and the fix is well-scoped.
+
+**Purpose:** apply the smallest safe fix to a single failing code cell and confirm execution succeeds.
+
+**Constraints:**
+- Touch only the failing code cell source
+- Do not edit markdown cells
+- Do not refactor unrelated code
+
+**Execution rule:** re-run the full notebook via `nbconvert --execute` after the fix. Requires `nbconvert` (`pip install nbconvert`) — not available in all environments by default.
+
+**Success criteria:**
+- `nbconvert` exits 0
+- Only the failing cell source changed — all other cell sources untouched
+
+**Allowed runtime-only changes:** outputs and execution counts may change across all cells as a result of full re-execution. This is expected and acceptable.
+
+**Validated error types:** `KeyError`, `TypeError`, `NameError` — see `docs/notebook-testing-findings.md` §8–10 for case records.
